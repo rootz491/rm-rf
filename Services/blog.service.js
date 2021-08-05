@@ -12,11 +12,10 @@ module.exports = {
             return false;
         }
     },
-    pushBlog: async (title, content) => {
+    getOneBlog: async () => {
         try {
-            const data = await BlogModel.insertMany({title, content});
-            console.log(data);
-            // return data;
+            const blog = await BlogModel.findOne();
+            return blog;
         } catch (error) {
             console.log(error)
             return false;
@@ -30,5 +29,15 @@ module.exports = {
             console.log(error)
             return false;
         }
-    } 
+    },
+    pushBlog: async (title, description, content) => {
+        try {
+            const data = await BlogModel.insertMany({title, description, content});
+            // console.log(data);
+            return data;
+        } catch (error) {
+            console.log(error)
+            return false;
+        }
+    },
 }

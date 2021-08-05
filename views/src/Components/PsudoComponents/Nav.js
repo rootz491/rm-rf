@@ -7,8 +7,9 @@ export default function Nav() {
             <Link className="w-navBtn text-center bg-navBtn shadow-nav px-5 rounded-sm text-white py-1" to="/">home</Link>
 
             <div className="flex space-x-8">
+                <Link className="w-navBtn text-center bg-navBtn shadow-nav px-5 rounded-sm text-white py-1" to="/post">post</Link>
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav px-5 rounded-sm text-white py-1" to="/">gallery</Link>
-                <Link className="w-navBtn text-center bg-navBtn shadow-nav px-5 rounded-sm text-white py-1" to="/">blogs</Link>
+                <Link className="w-navBtn text-center bg-navBtn shadow-nav px-5 rounded-sm text-white py-1" to="/blogs">blogs</Link>
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav px-5 rounded-sm text-white py-1" to="/">about</Link>
             </div>
         </div>

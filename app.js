@@ -5,6 +5,7 @@ const cors = require("cors")
 require("dotenv").config();
 
 const { getBlogs, getBlogById } = require("./Services/blog.service");
+const BlogRoutes = require("./Routes/blog.routes");
 
 const app = express();
 const allowedOrigin = 'localhost:3000';
@@ -21,17 +22,7 @@ app.use(cors({
     credentials: true
 }));
 
-
-app.get('/getData', async (_, res) => {
-    const blogs = await getBlogs()
-    res.json(blogs);
-})
-
-app.get('/api/blog/:id', async (req, res) => {
-    const blog = await getBlogById(req.params.id);
-    res.json(blog);
-})
-
+app.use("/api", BlogRoutes);
 
 app.listen(process.env.PORT, _ => {
     console.log("server is running on port " + process.env.PORT)
