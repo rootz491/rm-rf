@@ -26,7 +26,7 @@ export default function Blog({ match: { params: { id } } }) {
             });
         }
         fetchBlog();
-    }, []);
+    }, [id]);
 
     return (
         <div className="min-h-screen bg-secondaryBg">
