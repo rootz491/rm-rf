@@ -12,9 +12,9 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="md:h-screen bg-primaryBg">
+        <div className="min-h-screen bg-primaryBg">
             <Nav />
-            <div className="md:flex md:h-5/6 w-100">
+            <div className="grid gap-20 md:flex w-100 h-full mt-32 md:my-32">
 
                 <div className="flex-1 h-3/4 grid place-content-center">
                     <div className="space-y-3">
@@ -27,7 +27,7 @@ export default function Home() {
                 </div>
                 
                 <div className="flex-1 h-1/2 md:h-3/4 grid place-content-center">
-                    <img className="md:w-80 w-56" src="/main-cover.svg" alt="big svg"/>
+                    <img className="md:w-80 w-64" src="/main-cover.svg" alt="big svg"/>
                 </div>
 
             </div>
