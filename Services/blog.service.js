@@ -33,11 +33,28 @@ module.exports = {
     pushBlog: async (title, description, content) => {
         try {
             const data = await BlogModel.insertMany({title, description, content});
-            // console.log(data);
             return data;
         } catch (error) {
             console.log(error)
             return false;
         }
     },
+    deleteBlog: async id => {
+        try {
+            const data = await BlogModel.findByIdAndDelete(id);
+            return data;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    },
+    editBlog: async (id, title, description, content) => {
+        try {
+            const blog = await BlogModel.findByIdAndUpdate(id, { title, description, content });
+            return blog;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
 }
