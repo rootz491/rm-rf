@@ -1,16 +1,36 @@
 import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import user from '../../user.service';
 
 export default function Nav() {
     const btns = useRef();
     const check = useRef();
 
     const MenuToggle = (e) => {
-        if (e.target.checked) 
-            btns.current.className = btns.current.className.replace("hidden", "grid");
-        else
-            btns.current.className = (btns.current.className.replace("grid", "hidden"));
-        
+        if (e.target.checked)   btns.current.className = btns.current.className.replace("hidden", "grid");
+        else    btns.current.className = (btns.current.className.replace("grid", "hidden"));
+    }
+
+    const LogoutHandler = async () => {
+        try {
+            const res = await fetch('/auth/logout', {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    authorization: user.authToken
+                },
+                body: JSON.stringify({
+                    token: user.refreshToken
+                })
+            });
+            const data = await res.json();
+            console.log(data);
+            // localStorage.setItem('authToken', null)
+            // localStorage.setItem('refreshToken', null)
+            // localStorage.setItem('username', null)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -22,6 +42,11 @@ export default function Nav() {
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/post">post</Link>
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/blogs">blogs</Link>
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/">about</Link>
+                {
+                    user.username ?
+                    <button onClick={LogoutHandler} className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1">logout</button> :
+                    <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/">login</Link>
+                }
             </div>
         </div>
     )

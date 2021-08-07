@@ -1,7 +1,6 @@
 const BlogModel = require("../Models/blog.model");
 
 
-
 module.exports = {
     getBlogs: async () => {
         try {

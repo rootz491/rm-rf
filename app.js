@@ -4,15 +4,16 @@ const logger = require("morgan");
 const cors = require("cors")
 require("dotenv").config();
 
-const { getBlogs, getBlogById } = require("./Services/blog.service");
 const BlogRoutes = require("./Routes/blog.routes");
+const AuthRoutes = require("./Routes/auth.routes");
 
 const app = express();
 const allowedOrigin = 'localhost:3000';
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }).then(() => console.log("connected to database successfully"));
 
 app.use(express.json());
@@ -22,6 +23,7 @@ app.use(cors({
     credentials: true
 }));
 
+app.use("/auth", AuthRoutes);
 app.use("/api", BlogRoutes);
 
 app.listen(process.env.PORT, _ => {
