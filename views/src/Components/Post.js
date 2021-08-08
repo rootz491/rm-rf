@@ -1,16 +1,19 @@
 import React from 'react'
 import { useHistory, Link } from 'react-router-dom';
+import { getBearer } from '../user.service';
 
 export default function Post() {
     const history = useHistory();
 
-    const submitHandler = e => {
+    const submitHandler = async e => {
         e.preventDefault();
+        const authToken = await getBearer();
         
         fetch("/api/post", {
             method: "POST",
             headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "authorization": authToken
             },
             body: JSON.stringify({
                 title: e.target.title.value,

@@ -1,4 +1,4 @@
-const { User, Token, makePassword, validPassword } = require("../Models/auth.model");
+const { User, makePassword, validPassword } = require("../Models/auth.model");
 
 module.exports = {
     login: async (username, password) => {
@@ -38,33 +38,5 @@ module.exports = {
             console.log(error);
             return false;
         }
-    },
-    //  token management
-    pushToken: async (userId, refreshToken) => {
-        try {
-            await Token.insertMany({userId, refreshToken});
-            return true
-        } catch (error) {
-            console.log(error);
-            return false
-        }
-    },
-    checkToken: async (userId, refreshToken) => {
-        try {
-            const token = await Token.findOne({userId, refreshToken});
-            return (token !== null) ? true : false;
-        } catch (error) {
-            console.log(error);
-            return false
-        }
-    },
-    popToken: async (userId, refreshToken) => {
-        try {
-            const token = await Token.findOneAndDelete({userId, refreshToken});
-            return (token !== null) ? true : false;
-        } catch (error) {
-            console.log(error);
-            return false
-        }
-    },
+    }
 }

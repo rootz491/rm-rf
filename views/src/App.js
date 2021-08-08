@@ -7,6 +7,7 @@ import Blogs from "./Components/Blogs";
 import Edit from "./Components/Edit";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
+import PrivateRoute from "./Components/PsudoComponents/PrivateRoute";
 
 function App() {
   return (
@@ -19,9 +20,9 @@ function App() {
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/blogs" component={Blogs} />
-        <Route exact path="/post" component={Post} />
-        <Route exact path="/blog/:id" component={Blog} />
-        <Route exact path="/blog/:id/edit" component={Edit} />
+        <PrivateRoute exact path="/post" component={Post} />
+        <PrivateRoute exact path="/blog/:id" component={Blog} />
+        <PrivateRoute exact path="/blog/:id/edit" component={Edit} />
       </Switch>
     
     </Router>

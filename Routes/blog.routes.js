@@ -4,9 +4,9 @@ const { isAuthenticated, isAuthorized } = require("../Services/verification.serv
 
 router.get("/blogs", apiGetBlogs);
 router.get("/blogs/latest", apiGetOneBlog);
-router.post('/post', isAuthenticated, apiPushBlog);
-router.get("/blog/:id", apiGetBlogById);
+router.post('/post', isAuthenticated, isAuthorized, apiPushBlog);
+router.get("/blog/:id", isAuthenticated, apiGetBlogById);
 router.delete('/blog/:id', isAuthenticated, isAuthorized, apiDeleteBlog);
-router.patch('/blog/:id', isAuthenticated, apiEditBlog);
+router.patch('/blog/:id', isAuthenticated, isAuthorized, apiEditBlog);
 
 module.exports = router;

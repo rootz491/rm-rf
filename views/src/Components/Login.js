@@ -24,7 +24,6 @@ export default function Login() {
                 console.log(data)
                 localStorage.setItem('authToken', data.authToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('username', data.username);
                 history.push('/');
             }
             else if (res.status === 401) throw "user not found or incorrect password";
@@ -49,7 +48,10 @@ export default function Login() {
                     <input type="password" className="w-full p-2" name="password" placeholder="password" required />
                     <p className="text-xs text-gray-500">make sure to choose a strong password</p>
                 </div>
-                <button type="submit" className="w-26 text-center px-3 py-0.5 border-2 border-navBtn rounded-sm hover:bg-navBtn hover:text-white">log in</button>
+                <div className="flex justify-between align-middle">
+                    <button type="submit" className="w-26 text-center px-3 py-0.5 border-2 border-navBtn rounded-sm hover:bg-navBtn hover:text-white">log in</button>
+                    <Link to="/signup">create account</Link>
+                </div>
             </form>
         </div>
     )

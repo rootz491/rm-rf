@@ -24,22 +24,10 @@ const userSchema = mongoose.Schema({
     }
 });
 
-const tokenSchema = mongoose.Schema({
-    userId: {
-        type: String,
-        required: true
-    },
-    refreshToken: {
-        type: String,
-        required: true
-    }
-})
-
     
 // Exporting module to allow it to be imported in other files 
 module.exports = {
     User: mongoose.model('User', userSchema),
-    Token:  mongoose.model('Token', tokenSchema),
 
     // Method to set salt and hash the password for a user 
     makePassword: function(password) { 

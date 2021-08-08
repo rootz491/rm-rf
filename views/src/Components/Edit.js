@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, Link } from 'react-router-dom';
+import { getBearer } from '../user.service';
 
 export default function Edit({ match: { params: { id } } }) {
     const history = useHistory();
@@ -25,13 +26,15 @@ export default function Edit({ match: { params: { id } } }) {
         })
     }, [id])
 
-    const submitHandler = e => {
+    const submitHandler = async e => {
         e.preventDefault();
+        const authToken = await getBearer();
         
         fetch(`/api/blog/${id}`, {
             method: "PATCH",
             headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "authorization": authToken
             },
             body: JSON.stringify({
                 title,

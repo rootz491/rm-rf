@@ -11,10 +11,9 @@ module.exports = {
             const user = await login(username, password);
             if (!user)  throw "user not found or wrong password";
             const { role, _id } = user;
-            const authToken = jwt.sign({_id, username, role}, process.env.SECRET, { expiresIn: "30m" });
-            const refreshToken = jwt.sign({ id:_id }, process.env.SECRET, { expiresIn: "3h" });
-            await pushToken(_id, refreshToken); //  store refresh token at database
-            res.json({success: true, username, authToken, refreshToken });
+            const authToken = jwt.sign({_id, username, role}, process.env.SECRET, { expiresIn: "1h" });
+            const refreshToken = jwt.sign({ id:_id }, process.env.SECRET, { expiresIn: "6d" });
+            res.json({success: true, authToken, refreshToken });
         } catch (error) {
             console.log(error);
             res.status(401).json({success: false, error})
@@ -47,11 +46,10 @@ module.exports = {
     //  token
     apiLogout: async (req, res) => {
         const { token } = req.body;
-        const id = req.user._id;
         //  remove refresh token
         try {
             if (!_.isString(token)) throw "refresh token is not a valid sting";
-            if (await popToken(id, token)) res.json({ success: true });
+            /* @TODO invalidate the token */
             else throw "invalid refresh token";    
         } catch (error) {
             res.status(400).json({ success: false, error })
@@ -59,14 +57,14 @@ module.exports = {
     },
     apiUpdateToken: async (req, res) => {
         const { token } = req.body;
-        const id = req.user.id;
         const user = req.user;
-        console.log(req.body);
         try {
             if (!_.isString(token)) throw "refresh token is not a valid sting";
-            if (await checkToken(id, token)) {
+            const { exp } = jwt.verify(token, process.env.SECRET);
+            console.log(exp, new Date().getTime() / 1000);
+            if (exp > new Date().getTime() / 1000) {
                 //  sign JWT tokens with secret key
-                const authToken = jwt.sign({ ...user }, process.env.SECRET_KEY, { expiresIn: "15m" });
+                const authToken = jwt.sign({ ...user }, process.env.SECRET, { expiresIn: "1h" });
                 res.json({success: true, authToken});
             }
             else throw "invalid refresh token";
