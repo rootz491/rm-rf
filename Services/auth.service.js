@@ -23,7 +23,6 @@ module.exports = {
             newUser.hash = hash;
             newUser.salt = salt;
             let userRes = await newUser.save();
-            console.log(userRes);
             return userRes
         } catch (error) {
             console.log(error);
@@ -34,6 +33,15 @@ module.exports = {
         try {
             const user = await User.findOne({username});
             return (user === null) ? true : false;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    },
+    getUserById: async id => {
+        try {
+            const user = await User.findById(id);
+            return (user === null) ? false : user;
         } catch (error) {
             console.log(error);
             return false;

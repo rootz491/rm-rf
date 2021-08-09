@@ -11,12 +11,28 @@ export const isAuthenticated = () => {
     if (!authToken || !refreshToken) return false
     try {
         const { exp } = decode(refreshToken)
-        if (exp < new Date().getTime() / 1000) return false
+
+        if (exp < new Date().getTime() / 1000) {
+            reset();
+            return false  
+        } 
     } catch (error) {
-        
         return false
     }
     return true
+}
+
+export const isAdmin = () => {
+    try {
+        if (isAuthenticated()) {
+            const authToken = localStorage.getItem("authToken");
+            const { role } = decode(authToken);
+            return (role === 'admin') ? true : false;
+        }
+        else return false
+    } catch (error) {
+        return false;
+    }
 }
 
 export const getBearer = async () => {
@@ -25,8 +41,9 @@ export const getBearer = async () => {
         const refreshToken = localStorage.getItem("refreshToken");
         if (!authToken || !refreshToken)
             return false;
-        const { exp } = decode(authToken)
-        if (exp < new Date().getTime() / 1000) {
+        const token = decode(authToken)
+        if (token.exp < new Date().getTime() / 1000) {
+            console.log('going to refresh token')
             const res = await fetch("/auth/token", {
                 method: "POST",
                 headers: {
@@ -37,10 +54,15 @@ export const getBearer = async () => {
                 })
             });
             const data = await res.json();
-            if (data.success) localStorage.setItem("authToken", data.authToken)
-        }
-            
-        return `bearer ${localStorage.getItem("authToken")}`
+            if (res.status === 200) {
+                localStorage.setItem("authToken", data.authToken)
+                localStorage.setItem("refreshToken", data.refreshToken)
+            }
+            else {
+                alert('your refresh token is expired, please log in again!');
+            }            
+        }   
+        return `Bearer ${localStorage.getItem("authToken")}`
     } catch (error) {
         console.log(error)
         return false

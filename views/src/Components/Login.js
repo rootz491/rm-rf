@@ -21,15 +21,16 @@ export default function Login() {
             });
             const data = await res.json();
             if (res.status === 200) {
-                console.log(data)
                 localStorage.setItem('authToken', data.authToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
                 history.push('/');
             }
-            else if (res.status === 401) throw "user not found or incorrect password";
-            else throw "internal error, please try again later!"
+            else {
+                alert(data.error);
+            }  
+
         } catch (error) {
-            alert(error);
+            console.log(error);
         }
     }
 

@@ -1,4 +1,4 @@
-const { login, signup, pushToken, isUsernameAvail } = require("../Services/auth.service");
+const { login, signup, isUsernameAvail, getUserById } = require("../Services/auth.service");
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 require("dotenv").config();
@@ -11,11 +11,11 @@ module.exports = {
             const user = await login(username, password);
             if (!user)  throw "user not found or wrong password";
             const { role, _id } = user;
-            const authToken = jwt.sign({_id, username, role}, process.env.SECRET, { expiresIn: "1h" });
-            const refreshToken = jwt.sign({ id:_id }, process.env.SECRET, { expiresIn: "6d" });
+            const authToken = jwt.sign({_id, username, role}, process.env.SECRET, { expiresIn: "20m" });
+            const refreshToken = jwt.sign({ id:_id }, process.env.SECRET, { expiresIn: "4d" });
             res.json({success: true, authToken, refreshToken });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             res.status(401).json({success: false, error})
         }
     },
@@ -57,17 +57,14 @@ module.exports = {
     },
     apiUpdateToken: async (req, res) => {
         const { token } = req.body;
-        const user = req.user;
         try {
             if (!_.isString(token)) throw "refresh token is not a valid sting";
-            const { exp } = jwt.verify(token, process.env.SECRET);
-            console.log(exp, new Date().getTime() / 1000);
-            if (exp > new Date().getTime() / 1000) {
-                //  sign JWT tokens with secret key
-                const authToken = jwt.sign({ ...user }, process.env.SECRET, { expiresIn: "1h" });
-                res.json({success: true, authToken});
-            }
-            else throw "invalid refresh token";
+            const {id} = jwt.verify(token, process.env.SECRET);
+            const { username, role } = await getUserById(id);
+            //  sign JWT tokens with secret key
+            const authToken = jwt.sign({ id, username, role }, process.env.SECRET, { expiresIn: "20m" });
+            const refreshToken = jwt.sign({ id }, process.env.SECRET, { expiresIn: "4d" });
+            res.json({success: true, authToken, refreshToken});
         } catch (error) {
             res.status(400).json({ success: false, error })
         }

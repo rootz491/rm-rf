@@ -24,8 +24,10 @@ export default function Signup() {
             if (res.status === 201) {
                 history.push("/login");
             }
-            else if (res.status === 401) throw "username not available";
-            else throw "internal error, please try again later!"
+            else if (res.status === 401) {
+                let data = await res.json()
+                alert(data.error)
+            }
         } catch (error) {
             alert(error);
         }

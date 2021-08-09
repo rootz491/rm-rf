@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
+import { getBearer } from '../../user.service';
 
 export default function Actions(props) {
     const history = useHistory();
@@ -8,15 +9,24 @@ export default function Actions(props) {
 
     const DeleteHandler = async () => {
         try {
+            let authToken = await getBearer();
             setLoading(true);
             const res = await fetch(`/api/blog/${id}/`, {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    "content-type": "application/json",
+                    "authorization": authToken
+                }
             })
             const data = await res.json();
-            console.log(data);
-            setLoading(false);
-            history.push('/blogs')
-
+            if (res.status === 200) {
+                console.log(data);
+                history.push('/blogs')
+            } 
+            else if (res.status === 401 || res.status === 403) {
+                alert(data.error);
+                setLoading(false);
+            }
         } catch (error) {
             console.log(error);
             setLoading(false);

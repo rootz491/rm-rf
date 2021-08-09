@@ -5,6 +5,7 @@ import gfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import Tags from './PsudoComponents/Tags'
 import Actions from './PsudoComponents/Actions'
+import { getBearer } from '../user.service'
 
 export default function Blog({ match: { params: { id } } }) {
     const [blog, setBlog] = useState({});
@@ -12,8 +13,14 @@ export default function Blog({ match: { params: { id } } }) {
     const [unavailable, setUnavailable] = useState(false);
 
     useEffect(() => {
-        const fetchBlog = () => {
-            fetch(`/api/blog/${id}`)
+        const fetchBlog = async () => {
+            const authToken = await getBearer();
+            fetch(`/api/blog/${id}`, {
+                method: "GET",
+                headers: {
+                    "authorization": authToken
+                }
+            })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {

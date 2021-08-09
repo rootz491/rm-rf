@@ -11,40 +11,57 @@ export default function Edit({ match: { params: { id } } }) {
     const [unavailable, setUnavailable] = useState(false);
 
     useEffect(() => {
-        fetch(`/api/blog/${id}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                setLoading(false);
-                setTitle(data.blog.title);
-                setDescription(data.blog.description);
-                setContent(data.blog.content);
-            }
-            else {
-                setUnavailable(true);
-            }
-        })
+
+        const fetchBlog = async () => {
+            const authToken = await getBearer();
+            fetch(`/api/blog/${id}`, {
+                method: "GET",
+                headers: {
+                    "authorization": authToken
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setLoading(false);
+                    setTitle(data.blog.title);
+                    setDescription(data.blog.description);
+                    setContent(data.blog.content);
+                }
+                else {
+                    setUnavailable(true);
+                }
+            });
+        }
+        fetchBlog();
     }, [id])
 
     const submitHandler = async e => {
         e.preventDefault();
-        const authToken = await getBearer();
-        
-        fetch(`/api/blog/${id}`, {
-            method: "PATCH",
-            headers: {
-                "content-type": "application/json",
-                "authorization": authToken
-            },
-            body: JSON.stringify({
-                title,
-                description,
-                content
-            })
-        }).then(res => res.json())
-        .then(data => console.log(data))
-        .then(history.push(`/blog/${id}`));
-
+        try {
+            const authToken = await getBearer();
+            let res = await fetch(`/api/blog/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "content-type": "application/json",
+                    "authorization": authToken
+                },
+                body: JSON.stringify({
+                    title,
+                    description,
+                    content
+                })
+            });
+            let data = await res.json();
+            if (res.status === 200) {
+                history.push(`/blog/${id}`)
+            }
+            else if (res.status === 401 || res.status === 403) {
+                alert(data.error)
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (

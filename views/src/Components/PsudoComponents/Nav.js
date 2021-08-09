@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
-import { Link } from 'react-router-dom'
-import { isAuthenticated, reset } from '../../user.service';
+import { Link, useHistory } from 'react-router-dom'
+import { isAdmin, isAuthenticated, reset } from '../../user.service';
 
 export default function Nav() {
+    const history = useHistory();
     const btns = useRef();
     const check = useRef();
 
@@ -13,6 +14,7 @@ export default function Nav() {
 
     const LogoutHandler = async () => {
         reset();
+        history.push('/login');
     }
 
     return (
@@ -22,13 +24,15 @@ export default function Nav() {
             <label className="block md:hidden z-10" htmlFor="menu">🌟</label>
             <div ref={btns} className="absolute w-screen left-0 top-30 hidden gap-4 place-content-center md:static md:flex md:space-x-2 lg:space-x-8 bg-primaryBg md:bg-transparent">
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/blogs">blogs</Link>
-                <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/">about</Link>
+                {
+                    isAdmin() ?
+                    <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/post">post</Link> :
+                    null
+                }
+                <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/about">about</Link>
                 {
                     isAuthenticated() ?
-                    <>
-                        <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/post">post</Link>
-                        <button onClick={LogoutHandler} className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1">logout</button>
-                    </> :
+                    <button onClick={LogoutHandler} className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1">logout</button> :
                     <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/login">login</Link>
                 }
             </div>
