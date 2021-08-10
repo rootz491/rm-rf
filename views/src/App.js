@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import PrivateRoute from "./Components/PsudoComponents/PrivateRoute";
-import PrivateAdminRoute from "./Components/PsudoComponents/PrivateAdminRoute";
 import Home from "./Components/Home";
+import Profile from "./Components/Profile";
 import Blog from "./Components/Blog";
 import Post from "./Components/Post";
 import Blogs from "./Components/Blogs";
@@ -23,9 +23,10 @@ function App() {
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/blogs" component={Blogs} />
         <Route exact path="/about" component={About} />
+        <PrivateRoute exact path="/me" component={Profile} />
         <PrivateRoute exact path="/post" component={Post} />
         <PrivateRoute exact path="/blog/:id" component={Blog} />
-        <PrivateAdminRoute exact path="/blog/:id/edit" component={Edit} />
+        <PrivateRoute exact path="/blog/:id/edit" component={Edit} />
       </Switch>
     
     </Router>

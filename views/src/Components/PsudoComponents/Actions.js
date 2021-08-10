@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
-import { getBearer } from '../../user.service';
+import { getBearer, getUserId, isAdmin } from '../../user.service';
 
 export default function Actions(props) {
     const history = useHistory();
@@ -8,6 +8,10 @@ export default function Actions(props) {
     const [loading, setLoading] = useState(false);
 
     const DeleteHandler = async () => {
+        if (!window.confirm("are you sure? There's no coming back!")) {
+            setLoading(false);
+            return
+        }
         try {
             let authToken = await getBearer();
             setLoading(true);
@@ -21,7 +25,7 @@ export default function Actions(props) {
             const data = await res.json();
             if (res.status === 200) {
                 console.log(data);
-                history.push('/blogs')
+                history.push('/me')
             } 
             else if (res.status === 401 || res.status === 403) {
                 alert(data.error);
@@ -42,11 +46,15 @@ export default function Actions(props) {
     }
 
     return (
-        <div className="lg:sticky lg:top-56 mx-auto md:mx-0 w-1/2 py-2 px-4 lg:w-auto border-4 border-navBtn rounded-md">
+        <div className="m-auto w-1/2 py-2 px-4 lg:w-auto border-4 border-navBtn rounded-md">
             <h1 className="text-navBtn text-center md:text-left">ACTIONS</h1>
             <div className="grid gap-4 place-content-center md:place-content-start m-auto md:flex mt-4">
+                { (getUserId()===props.userId) ?
                 <button disabled={loading} onClick={EditHandler} className="m-auto px-4 py-0.5 w-min text-center bg-navBtn rounded-md text-white border-2 border-navBtn hover:bg-secondaryBg hover:text-navBtn">edit</button>
+                : null }
+                { (isAdmin() || getUserId()===props.userId) ?
                 <button disabled={loading} onClick={DeleteHandler} className="m-auto px-4 py-0.5 w-min text-center bg-navBtn rounded-md text-white border-2 border-navBtn hover:bg-secondaryBg hover:text-navBtn">delete</button>
+                : null }
                 <button disabled={loading} onClick={ShareHandler} className="m-auto px-4 py-0.5 w-min text-center bg-navBtn rounded-md text-white border-2 border-navBtn hover:bg-secondaryBg hover:text-navBtn">share</button>
             </div>
         </div>

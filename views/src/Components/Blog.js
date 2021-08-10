@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
-import gfm from 'remark-gfm'
-import rehypeHighlight from 'rehype-highlight'
-import Tags from './PsudoComponents/Tags'
+import marked from "marked"
+import DOMPurify from "dompurify"
 import Actions from './PsudoComponents/Actions'
 import { getBearer } from '../user.service'
 
 export default function Blog({ match: { params: { id } } }) {
-    const [blog, setBlog] = useState({});
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [content, setContent] = useState('');
+    const [userId, setUserId] = useState('');
     const [loading, setLoading] = useState(true);
     const [unavailable, setUnavailable] = useState(false);
 
@@ -24,7 +25,12 @@ export default function Blog({ match: { params: { id } } }) {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    setBlog(data.blog)
+                    setTitle(data.blog.title);
+                    setDescription(data.blog.description);
+                    const unsafeHtml = marked(data.blog.content);
+                    const safeHtml = DOMPurify.sanitize(unsafeHtml);
+                    setContent(safeHtml);
+                    setUserId(data.blog.userId);
                     setLoading(false);
                 }
                 else {
@@ -43,19 +49,18 @@ export default function Blog({ match: { params: { id } } }) {
             </div>
             {
             !loading ?
-            <div id="blog" className="lg:flex min-h-screen p-2">
+            <div id="blog" className="lg:flex p-2">
 
                 <div id="main" className="h-auto w-100 lg:w-2/3 py-2 px-4 lg:h-auto min-h-full overflow-hidden">
-                    <h1 className="text-2xl min-h-96 text-center underline text-white">{blog.title}</h1>
+                    <h1 className="text-2xl min-h-96 text-center underline text-white">{title}</h1>
                     <p className="text-gray-200 border-l-2 my-6 pl-4">
-                        {blog.description}
+                        {description}
                     </p>
-                    <ReactMarkdown plugins={[gfm, rehypeHighlight]} children={blog.content} />
+                    <iframe className="h-96 w-full" title="markdown" id="markdown" srcDoc={content}></iframe>
                 </div>
 
                 <div id="menu" className="h-auto w-100 lg:h-auto lg:w-1/3 min-h-full mt-8 lg:mt-0 px-6 md:space-y-4 lg:block flex space-x-4">
-                    <Tags tags={["design", "old", "retro", "web", "app", "blog"]} />
-                    <Actions id={blog._id} />
+                    <Actions userId={userId} id={id} />
                 </div>
             </div>
             :

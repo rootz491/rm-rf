@@ -22,6 +22,32 @@ export const isAuthenticated = () => {
     return true
 }
 
+export const getUsername = () => {
+    try {
+        if (isAuthenticated()) {
+            const authToken = localStorage.getItem("authToken");
+            const { username } = decode(authToken);
+            return username;
+        }
+        else return "anonymous user"
+    } catch (error) {
+        return "anonymous user";
+    }
+}
+
+export const getUserId = () => {
+    try {
+        if (isAuthenticated()) {
+            const authToken = localStorage.getItem("authToken");
+            const { id } = decode(authToken);
+            return id;
+        }
+        else return false
+    } catch (error) {
+        return false;
+    }
+}
+
 export const isAdmin = () => {
     try {
         if (isAuthenticated()) {

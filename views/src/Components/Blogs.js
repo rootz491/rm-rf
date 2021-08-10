@@ -27,7 +27,7 @@ export default function Blogs() {
                     {loading ?
                     <h1 className="text-navBtn text-2xl text-center">please wait</h1> :
                     blogs.map((blog, i) => {
-                        return <BlogCard key={i} title={blog.title} description={blog.description} id={blog._id} />
+                        return <BlogCard key={i} title={blog.title} description={blog.description} id={blog._id} thumbnail={blog.thumbnail} />
                     })}
                 </div>
             </div>

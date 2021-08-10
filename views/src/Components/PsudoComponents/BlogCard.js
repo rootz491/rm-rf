@@ -5,7 +5,7 @@ export default function BlogCard(props) {
     return (
         <div className="w-60 overflow-hidden rounded-md m-auto">
             <div className="w-full bg-white">
-                <img className="h-32 m-auto" src="/favicon.ico" alt="img" />
+                <img className="h-32 m-auto" src={props.thumbnail} alt="img" />
             </div>
             <div className="px-3 py-2 space-y-2 bg-purpleBg text-white">
                 <h1 className="text-center">{props.title}</h1>

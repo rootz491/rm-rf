@@ -7,11 +7,12 @@ export default function Edit({ match: { params: { id } } }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [content, setContent] = useState('');
+    const [thumbnail, setThumbnail] = useState('');
+    const [isPublic, setIsPublic] = useState(true);
     const [loading, setLoading] = useState(true);
     const [unavailable, setUnavailable] = useState(false);
 
     useEffect(() => {
-
         const fetchBlog = async () => {
             const authToken = await getBearer();
             fetch(`/api/blog/${id}`, {
@@ -27,6 +28,10 @@ export default function Edit({ match: { params: { id } } }) {
                     setTitle(data.blog.title);
                     setDescription(data.blog.description);
                     setContent(data.blog.content);
+                    setIsPublic(data.blog.isPublic);
+                    (data.blog.thumbnail) ?
+                    setThumbnail(data.blog.thumbnail) :
+                    setThumbnail("https://via.placeholder.com/600x200")
                 }
                 else {
                     setUnavailable(true);
@@ -49,7 +54,9 @@ export default function Edit({ match: { params: { id } } }) {
                 body: JSON.stringify({
                     title,
                     description,
-                    content
+                    content,
+                    isPublic,
+                    thumbnail
                 })
             });
             let data = await res.json();
@@ -72,8 +79,17 @@ export default function Edit({ match: { params: { id } } }) {
             {
             !loading ?
             <form onSubmit={submitHandler} method="POST" action="/api/post" className="w-screen px-3 md:px-10 m-auto space-y-4">
+                <img className="w-full" src={thumbnail} alt="thumbnail" />
                 <h1 className="text-3xl text-navBtn">Edit</h1>
                 <input  value={title} onChange={e => setTitle(e.target.value)} className="w-full p-2" type="text" name="title"  placeholder="title" required />
+                <div>
+                    <input placeholder="thumbnail image" type="url" value={thumbnail} onChange={e => setThumbnail(e.target.value)} className="w-full p-2" />
+                    <p className="text-xs text-gray-500">URL to thumbnail image for your blog</p>
+                </div>
+                <div className="w-56 flex justify-between align-baseline">
+                    <label htmlFor="isPublic">publicily visible</label>
+                    <input id="isPublic" type="checkbox" defaultChecked={isPublic} onChange={e => setIsPublic(e.target.checked)} />
+                </div>
                 <div>
                     <textarea  value={description} onChange={e => setDescription(e.target.value)} className="w-full h-32 p-2" name="description" placeholder="description" required></textarea>
                     <p className="text-xs text-gray-500">Doesn't support markdown</p>
