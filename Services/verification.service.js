@@ -11,8 +11,8 @@ module.exports = {
             const authToken = req.headers.authorization.split(' ')[1];
             const user = jwt.verify(authToken, process.env.SECRET);
             if (!user)  throw "Invalid token! Try login again"
-            const { username, role, _id } = user;
-            req.user = { username, role, id: _id };
+            const { username, role, id } = user;
+            req.user = { username, role, id };
             next();
         } catch (error) {
             res.status(401).json({success: false, error});

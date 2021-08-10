@@ -11,7 +11,7 @@ module.exports = {
             const user = await login(username, password);
             if (!user)  throw "user not found or wrong password";
             const { role, _id } = user;
-            const authToken = jwt.sign({_id, username, role}, process.env.SECRET, { expiresIn: "20m" });
+            const authToken = jwt.sign({id:_id, username, role}, process.env.SECRET, { expiresIn: "20m" });
             const refreshToken = jwt.sign({ id:_id }, process.env.SECRET, { expiresIn: "4d" });
             res.json({success: true, authToken, refreshToken });
         } catch (error) {

@@ -16,6 +16,18 @@ const blogSchema = mongoose.Schema({
     timestamp: {
         type: Date,
         default: Date.now()
+    },
+    userId: {
+        type: String,
+        required: true
+    },
+    isPublic: {
+        type: Boolean,
+        required: true,
+    },
+    thumbnail: {
+        type: String,
+        required: true
     }
 });
 
