@@ -7,7 +7,7 @@ export default function Post() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [content, setContent] = useState('');
-    const [thumbnail, setThumbnail] = useState('https://via.placeholder.com/600x200');
+    const [thumbnail, setThumbnail] = useState(`https://via.placeholder.com/600x150?text=edit this`);
     const [isPublic, setIsPublic] = useState(true);
 
     const submitHandler = async e => {

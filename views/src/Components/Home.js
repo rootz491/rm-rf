@@ -17,7 +17,7 @@ export default function Home() {
         <div className="min-h-screen bg-primaryBg">
             <Nav />
             {   isAuthenticated() ? null :
-                <h1 className="mt-8 text-center text-2xl text-navBtn">Hello visitor, please <Link className="text-secondaryBg underline" to="/login">login</Link> to view and posts Blogs</h1>
+                <h1 className="px-3 mt-8 text-center text-2xl text-navBtn">Hello visitor, please <Link className="text-secondaryBg underline" to="/login">login</Link> to view and posts Blogs</h1>
             }
             <div className="grid gap-20 md:flex w-100 h-full mt-32 md:my-32">
 

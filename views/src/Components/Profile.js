@@ -50,7 +50,10 @@ export default function Profile({ match: { params: { id } } }) {
                         <p>{isAdmin() ? "admin" : "user"}</p>
                     </div>
                 </div>
-                <h1 className="text-2xl text-navBtn my-4">Your Blogs</h1>
+                <div className="my-6">
+                    <h1 className="text-2xl text-navBtn">Your Blogs</h1>
+                    <p className="text-md">your public as well as private blogs are here</p>
+                </div>
                 <div className="grid gap-5 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 md:align-middle lg:gap-5">
                     {!loading ?
                     blogs.map((blog, i) => {

@@ -59,7 +59,7 @@ export default function Blog({ match: { params: { id } } }) {
                     <iframe className="h-96 w-full" title="markdown" id="markdown" srcDoc={content}></iframe>
                 </div>
 
-                <div id="menu" className="h-auto w-100 lg:h-auto lg:w-1/3 min-h-full mt-8 lg:mt-0 px-6 md:space-y-4 lg:block flex space-x-4">
+                <div id="menu" className="h-auto w-100 lg:h-auto lg:w-1/3 min-h-full mt-8 lg:mt-0 sm:px-6 md:space-y-4 lg:block flex space-x-4">
                     <Actions userId={userId} id={id} />
                 </div>
             </div>

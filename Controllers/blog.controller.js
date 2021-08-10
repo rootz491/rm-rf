@@ -4,7 +4,14 @@ module.exports = {
     apiGetBlogs: async (_, res) => {
         try {
             const blogs = await getBlogs();
-            if (blogs) res.json({success: true, blogs})
+            if (blogs) {
+                let pBlog = []
+                blogs.forEach(blog => {
+                    const {_id, title, thumbnail, description} = blog;
+                    pBlog.push({_id, title, thumbnail, description});
+                })
+                res.json({success: true, blogs: pBlog})
+            }
             else throw "internal error";
         } catch (error) {
             console.log(error);
@@ -14,7 +21,10 @@ module.exports = {
     apiGetOneBlog: async (_, res) => {
         try {
             const blog = await getOneBlog();
-            if (blog) res.json({success: true, blog})
+            if (blog) {
+                const {_id, title, thumbnail, description} = blog;
+                res.json({success: true, blog: {_id, title, thumbnail, description}})
+            }
             else throw "internal error";
         } catch (error) {
             console.log(error);

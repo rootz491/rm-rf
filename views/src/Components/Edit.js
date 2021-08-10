@@ -31,7 +31,7 @@ export default function Edit({ match: { params: { id } } }) {
                     setIsPublic(data.blog.isPublic);
                     (data.blog.thumbnail) ?
                     setThumbnail(data.blog.thumbnail) :
-                    setThumbnail("https://via.placeholder.com/600x200")
+                    setThumbnail(`https://via.placeholder.com/600x200?text=edit this`)
                 }
                 else {
                     setUnavailable(true);
