@@ -42,6 +42,7 @@ export default function Edit({ match: { params: { id } } }) {
     }, [id])
 
     const submitHandler = async e => {
+        setLoading(true)
         e.preventDefault();
         try {
             const authToken = await getBearer();
@@ -65,9 +66,11 @@ export default function Edit({ match: { params: { id } } }) {
             }
             else if (res.status === 401 || res.status === 403) {
                 alert(data.error)
+                setLoading(false);
             }
         } catch (error) {
             console.log(error);
+            setLoading(false);
         }
     }
 
@@ -98,7 +101,7 @@ export default function Edit({ match: { params: { id } } }) {
                     <textarea value={content} onChange={e => setContent(e.target.value)} className="w-full h-72 p-2" name="content" placeholder="blog goes here" required></textarea>
                     <p className="text-xs text-gray-500">This section support some elements of markdown.</p>
                 </div>
-                <button type="submit" className="w-min px-3 py-0.5 border-2 border-navBtn rounded-sm hover:bg-navBtn hover:text-white">update</button>
+                <button disabled={loading} type="submit" className="w-min px-3 py-0.5 border-2 border-navBtn rounded-sm hover:bg-navBtn hover:text-white">update</button>
             </form>
             :
                 unavailable ?

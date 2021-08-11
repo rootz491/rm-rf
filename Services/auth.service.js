@@ -46,5 +46,14 @@ module.exports = {
             console.log(error);
             return false;
         }
+    },
+    getAllUsers: async () => {
+        try {
+            const users = await User.find({ role: 'user' });
+            return users ? users : false;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 }

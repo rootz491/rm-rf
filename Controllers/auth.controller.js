@@ -1,4 +1,4 @@
-const { login, signup, isUsernameAvail, getUserById } = require("../Services/auth.service");
+const { login, signup, isUsernameAvail, getUserById, getAllUsers } = require("../Services/auth.service");
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 require("dotenv").config();
@@ -68,6 +68,14 @@ module.exports = {
         } catch (error) {
             res.status(400).json({ success: false, error })
         }
+    },
+    apiGetUsers: async (_, res) => {
+        try {
+            const users = await getAllUsers();
+            if (!users) throw "users not found!";
+            res.json({ success: true, users });
+        } catch (error) {
+            res.status(400).json({ success: false, error });
+        }
     }
-
 }

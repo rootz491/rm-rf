@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import PrivateRoute from "./Components/PsudoComponents/PrivateRoute";
+import PrivateAdminRoute from "./Components/PsudoComponents/PrivateAdminRoute"
 import Home from "./Components/Home";
 import Profile from "./Components/Profile";
 import Blog from "./Components/Blog";
@@ -10,6 +11,7 @@ import Edit from "./Components/Edit";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import About from "./Components/About";
+import Admin from "./Components/Admin";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <PrivateRoute exact path="/post" component={Post} />
         <PrivateRoute exact path="/blog/:id" component={Blog} />
         <PrivateRoute exact path="/blog/:id/edit" component={Edit} />
+        <PrivateAdminRoute exact path="/admin" component={Admin} />
+        <PrivateAdminRoute exact path="/user/:id" component={Profile} />
       </Switch>
     
     </Router>

@@ -37,20 +37,22 @@ export default function Profile({ match: { params: { id } } }) {
     }, [id]);
 
     return (
-        <div className="md:min-h-screen w-screen bg-primaryBg pb-24 md:pb-0">
+        <div className="min-h-screen w-screen bg-primaryBg pb-24 md:pb-0">
             <Nav />
-            <div className="grid place-content-center my-16 md:my-0">
-                <div className="h-56 my-4 space-y-2">
-                    <div className="flex space-x-4 text-xl text-navBtn">
-                        <h1>username:</h1>
-                        <p>{getUsername()}</p>
+            <div className="grid place-content-center sm:my-16 md:my-0">
+                { id ? null :
+                    <div className="h-44 my-4 space-y-2">
+                        <div className="flex space-x-4 text-xl text-navBtn">
+                            <h1>username:</h1>
+                            <p>{getUsername()}</p>
+                        </div>
+                        <div className="flex space-x-4 text-xl text-navBtn">
+                            <h1>Role:</h1>
+                            <p>{isAdmin() ? "admin" : "user"}</p>
+                        </div>
                     </div>
-                    <div className="flex space-x-4 text-xl text-navBtn">
-                        <h1>Role:</h1>
-                        <p>{isAdmin() ? "admin" : "user"}</p>
-                    </div>
-                </div>
-                <div className="my-6">
+                }
+                <div className="mb-6">
                     <h1 className="text-2xl text-navBtn">Your Blogs</h1>
                     <p className="text-md">your public as well as private blogs are here</p>
                 </div>

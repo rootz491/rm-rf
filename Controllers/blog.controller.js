@@ -33,7 +33,6 @@ module.exports = {
     },
     apiGetBlogByUser: async (req, res) => {
         const userId = req.body.userId || req.user.id;
-        console.log(userId);
         try {
             //  check if user is owner of blog or admin
             if (!(req.user.role === 'admin' || req.user.id === userId)) throw "permission denied";
