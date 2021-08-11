@@ -28,9 +28,13 @@ app.use(cors({
 app.use("/auth", AuthRoutes);
 app.use("/api", BlogRoutes);
 
-app.get('*', (_, res) => {
+app.get('/', (_, res) => {
     res.sendFile(path.resolve(__dirname, './views/build', 'index.html'));
 });
+
+app.use((_, res) => {
+    res.redirect('/');
+})
 
 app.listen(process.env.PORT, _ => {
     console.log("server is running on port " + process.env.PORT)
