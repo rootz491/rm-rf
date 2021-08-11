@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const logger = require("morgan");
-const cors = require("cors")
+const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const BlogRoutes = require("./Routes/blog.routes");
@@ -16,6 +17,7 @@ mongoose.connect(process.env.MONGO_URL, {
     useFindAndModify: false
 }).then(() => console.log("connected to database successfully"));
 
+app.use(express.static(path.resolve(__dirname, './views/build')))
 app.use(express.json());
 app.use(logger("dev"));
 app.use(cors({
@@ -25,6 +27,10 @@ app.use(cors({
 
 app.use("/auth", AuthRoutes);
 app.use("/api", BlogRoutes);
+
+app.get('*', (_, res) => {
+    res.sendFile(path.resolve(__dirname, './views/build', 'index.html'));
+});
 
 app.listen(process.env.PORT, _ => {
     console.log("server is running on port " + process.env.PORT)
