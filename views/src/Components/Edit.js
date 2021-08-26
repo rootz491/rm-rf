@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, Link } from 'react-router-dom';
-import { getBearer } from '../user.service';
+import useBearer from '../Hooks/useBearer';
+// import { getBearer } from '../user.service';
+
 
 export default function Edit({ match: { params: { id } } }) {
     const history = useHistory();
@@ -11,14 +13,14 @@ export default function Edit({ match: { params: { id } } }) {
     const [isPublic, setIsPublic] = useState(true);
     const [loading, setLoading] = useState(true);
     const [unavailable, setUnavailable] = useState(false);
+    const bearer = useBearer();
 
     useEffect(() => {
         const fetchBlog = async () => {
-            const authToken = await getBearer();
             fetch(`/api/blog/${id}`, {
                 method: "GET",
                 headers: {
-                    "authorization": authToken
+                    "authorization": await bearer
                 }
             })
             .then(res => res.json())
@@ -45,12 +47,11 @@ export default function Edit({ match: { params: { id } } }) {
         setLoading(true)
         e.preventDefault();
         try {
-            const authToken = await getBearer();
             let res = await fetch(`/api/blog/${id}`, {
                 method: "PATCH",
                 headers: {
                     "content-type": "application/json",
-                    "authorization": authToken
+                    "authorization": await bearer
                 },
                 body: JSON.stringify({
                     title,

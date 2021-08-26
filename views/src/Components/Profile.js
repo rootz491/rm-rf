@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import BlogCard from './PsudoComponents/BlogCard'
-import { getBearer, getUserId, getUsername, isAdmin } from '../user.service';
+// import { getBearer, getUserId, getUsername, isAdmin } from '../user.service';
+import useUid from '../Hooks/useUid';
+import useBearer from '../Hooks/useBearer';
+import useUsername from '../Hooks/useUsername';
+
 import Nav from './PsudoComponents/Nav';
+import useAdmin from '../Hooks/useAdmin';
 
 export default function Profile({ match: { params: { id } } }) {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [unavailable, setUnavailable] = useState(false);
-
+    const bearer = useBearer();
+    const uid = useUid();
+    const username = useUsername();
+    const admin = useAdmin();
 
     useEffect(() => {
-        const userId = id ? id : getUserId();
+        const userId = id ? id : uid;
         const fetchBlogs = async () => {
-            const authToken = await getBearer();
             fetch(`/api/blogs`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
-                    "authorization": authToken
+                    "authorization": await bearer
                 },
                 body: JSON.stringify({ userId })
             })
@@ -44,11 +51,11 @@ export default function Profile({ match: { params: { id } } }) {
                     <div className="h-44 my-4 space-y-2">
                         <div className="flex space-x-4 text-xl text-navBtn">
                             <h1>username:</h1>
-                            <p>{getUsername()}</p>
+                            <p>{username}</p>
                         </div>
                         <div className="flex space-x-4 text-xl text-navBtn">
                             <h1>Role:</h1>
-                            <p>{isAdmin() ? "admin" : "user"}</p>
+                            <p>{admin ? "admin" : "user"}</p>
                         </div>
                     </div>
                 }

@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { getBearer } from '../user.service';
 import BlogCard from './PsudoComponents/UserCard';
 import Nav from './PsudoComponents/Nav';
+import useBearer from '../Hooks/useBearer';
+// import { getBearer } from '../user.service';
+
 
 
 export default function Admin() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [unavailable, setUnavailable] = useState(false);
+    const bearer = useBearer();
 
     useEffect(()=> {
         const fetchUsers = async () => {
+            
             const res = await fetch('/auth/users', {
                 headers: {
-                    "authorization": await getBearer()
+                    "authorization": await bearer
                 }
             })
             const data = await res.json();

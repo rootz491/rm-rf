@@ -1,11 +1,16 @@
 import React, { useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { isAuthenticated, reset, isAdmin } from '../../user.service';
+import useAdmin from '../../Hooks/useAdmin';
+import useAuth from '../../Hooks/useAuth';
+import useReset from '../../Hooks/useReset';
+// import { isAuthenticated, reset, isAdmin } from '../../user.service';
 
 export default function Nav() {
     const history = useHistory();
     const btns = useRef();
     const check = useRef();
+    const admin = useAdmin();
+    const auth = useAuth();
 
     const MenuToggle = (e) => {
         if (e.target.checked)   btns.current.className = btns.current.className.replace("hidden", "grid");
@@ -13,7 +18,8 @@ export default function Nav() {
     }
 
     const LogoutHandler = async () => {
-        reset();
+        console.log('adios')
+        useReset();
         history.push('/login');
     }
 
@@ -26,17 +32,17 @@ export default function Nav() {
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/">home</Link>
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/blogs">blogs</Link>
                 {
-                    isAuthenticated() ?
+                    auth ?
                     <>
                         <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/me">profile</Link>
                         <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/post">post</Link>
-                        {isAdmin() ? <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/admin">admin</Link> : null}
+                        {admin ? <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/admin">admin</Link> : null}
                     </> :
                     null
                 }
                 <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/about">about</Link>
                 {
-                    isAuthenticated() ?
+                    auth ?
                     <button onClick={LogoutHandler} className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1">logout</button> 
                     :
                     <Link className="w-navBtn text-center bg-navBtn shadow-nav rounded-sm text-white py-1" to="/login">login</Link>

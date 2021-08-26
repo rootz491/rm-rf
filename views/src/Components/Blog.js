@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import marked from "marked"
 import DOMPurify from "dompurify"
 import Actions from './PsudoComponents/Actions'
-import { getBearer } from '../user.service'
+import useBearer from '../Hooks/useBearer'
+// import { getBearer } from '../user.service'
+
 
 export default function Blog({ match: { params: { id } } }) {
     const [title, setTitle] = useState('');
@@ -12,14 +14,14 @@ export default function Blog({ match: { params: { id } } }) {
     const [userId, setUserId] = useState('');
     const [loading, setLoading] = useState(true);
     const [unavailable, setUnavailable] = useState(false);
+    const bearer = useBearer();
 
     useEffect(() => {
         const fetchBlog = async () => {
-            const authToken = await getBearer();
             fetch(`/api/blog/${id}`, {
                 method: "GET",
                 headers: {
-                    "authorization": authToken
+                    "authorization": await bearer
                 }
             })
             .then(res => res.json())

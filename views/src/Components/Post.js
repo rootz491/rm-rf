@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useHistory, Link } from 'react-router-dom';
-import { getBearer } from '../user.service';
+import useBearer from '../Hooks/useBearer';
+// import { getBearer } from '../user.service';
+
 
 export default function Post() {
     const history = useHistory();
@@ -10,17 +12,17 @@ export default function Post() {
     const [thumbnail, setThumbnail] = useState(`https://via.placeholder.com/600x150?text=edit this`);
     const [isPublic, setIsPublic] = useState(true);
     const [loading, setLoading] = useState(false);
+    const bearer = useBearer();
 
     const submitHandler = async e => {
         e.preventDefault();
         setLoading(true);
-        const authToken = await getBearer();
         
         fetch("/api/post", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                "authorization": authToken
+                "authorization": await bearer
             },
             body: JSON.stringify({
                 title,
